@@ -1,0 +1,13 @@
+.admin
+{
+    display: flex;
+}
+
+/* make it responsive to the screen's size */
+@media (max-width: 800px)
+{
+    .admin
+    {
+        flex-direction: column;
+    }
+}

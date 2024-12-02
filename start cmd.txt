@@ -1,0 +1,3 @@
+react (frontend) - npm start
+server (backend) - node ./index.js
+vite (admin) -  npm run dev
