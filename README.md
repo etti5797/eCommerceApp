@@ -45,7 +45,7 @@ This project is a full-stack eCommerce website built using the MERN stack: **Mon
 
 This project was developed following a tutorial by GreatStack ([YouTube Tutorial](https://www.youtube.com/watch?v=y99YgaQjgx4)).  
 Special thanks to the author for their detailed guidance and insights.
-
+---
 
 ## Updates and Additions  
 
@@ -55,5 +55,5 @@ Special thanks to the author for their detailed guidance and insights.
 - **Heart Icon on Product Page**: Added an interactive heart icon overlay on the product image, allowing users to toggle between adding/removing items from their wishlist. The icon updates dynamically to reflect the current state.  
 - **Wishlist Management**: Enabled users to remove items directly from the wishlist.  
 
----
+
 
