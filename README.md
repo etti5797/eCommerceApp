@@ -45,6 +45,7 @@ This project is a full-stack eCommerce website built using the MERN stack: **Mon
 
 This project was developed following a tutorial by GreatStack ([YouTube Tutorial](https://www.youtube.com/watch?v=y99YgaQjgx4)).  
 Special thanks to the author for their detailed guidance and insights.
+
 ---
 
 ## Updates and Additions  
