@@ -92,6 +92,12 @@
     color: white;
 }
 
+.wishlist-icon
+{
+    width: 40px;
+    cursor: pointer;
+}
+
 
 /* create a responsive design that optimizes the navigation bar's appearance and functionality on 
 devices with different screen widths*/

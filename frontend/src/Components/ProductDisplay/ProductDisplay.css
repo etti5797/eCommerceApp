@@ -131,6 +131,24 @@
     font-size: 14px;
 }
 
+.productdisplay-img
+{
+    position: relative;
+}
+
+.heart-icon {
+    position: absolute;
+    top: 20px;
+    right: 20px;
+    padding: 5px;
+    cursor: pointer;
+}
+
+.heart-icon img {
+    width: 30px; /* Adjust size of the heart icon */
+    height: 30px;
+}
+
 /* make it responsive to the screen's size*/
 @media(max-width: 1280px)
 {

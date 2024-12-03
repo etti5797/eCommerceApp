@@ -4,7 +4,8 @@ import logo from "../Assets/logo.png";
 import cart_icon from "../Assets/cart_icon.png";
 import { Link } from "react-router-dom";
 import { ShopContext } from "../../Context/ShopContext";
-import nav_dropdown_icon from "../Assets/navbar_dropdown_icon.png"
+import nav_dropdown_icon from "../Assets/navbar_dropdown_icon.png";
+import wishlist_icon from "../Assets/wishlist_icon.png";
 
 const Navbar = () => {
 
@@ -36,6 +37,7 @@ const Navbar = () => {
                 : <Link to='/login'><button>Login</button></Link>}
                 <Link to='/cart'><img src={cart_icon} alt="" /></Link>
                 <div className="nav-cart-count">{getTotalCartItems()}</div>
+                <Link to='/wishlist' ><img className="wishlist-icon" src={wishlist_icon} alt=""/></Link>
             </div>
         </div>
     );

@@ -154,6 +154,9 @@ const Users = mongoose.model('Users', {
     cartData : {
         type: Object,
     },
+    wishListData : {
+        type: Object,
+    },
     date : {
         type: Date,
         default: Date.now,
@@ -178,7 +181,8 @@ app.post('/signup', async (req, res)=>{
         name: req.body.name,
         email: req.body.email,
         password: req.body.password,
-        cartData: cart
+        cartData: cart,
+        wishListData: cart,
     });
 
     await user.save();
@@ -240,6 +244,28 @@ app.get('/popularwomen', async (req, res) => {
     res.send(popular_in_Women);
 });
 
+// Creating Endpoint For Subscribing To Newsletter
+
+const Subscribers = mongoose.model('Subscribers', {
+    email: {
+        type: String,
+        required: true,
+        unique: true,
+    },
+});
+
+app.post('/subscribe', async (req, res) => {
+    const {email} = req.body;
+    const existingSubscriber = await Subscribers.findOne({ email });
+    if(existingSubscriber)
+    {
+        return res.status(400).json({success: false, errors: "Subscriber already exists"});
+    }
+    const subscriber = new Subscribers({ email });
+    await subscriber.save();
+    res.json({success: true});
+});
+
 // Create Middleware To Fetch User
 
 const fetchUser = async (req, res, next) => {
@@ -289,6 +315,38 @@ app.post('/removefromcart', fetchUser, async (req, res) => {
 app.post('/getcart', fetchUser, async (req, res) => {
     let userData = await Users.findOne({_id: req.user.id});
     res.json({cartData : userData.cartData});
+});
+
+
+// Creating Endpoint For Adding Products To wishListData
+
+app.post('/addtowishlist', fetchUser, async (req, res) => {
+    let userData = await Users.findOne({_id: req.user.id});
+    if(userData.wishListData[req.body.itemId] === 0)
+    {
+        userData.wishListData[req.body.itemId] = 1;
+        await Users.findOneAndUpdate({_id: req.user.id}, {wishListData: userData.wishListData});
+    }
+    res.send("Added");  
+});
+
+// Creating Endpoint For Removing Products From wishListData
+
+app.post('/removefromwishlist', fetchUser, async (req, res) => {
+    let userData = await Users.findOne({_id: req.user.id});
+    if(userData.wishListData[req.body.itemId] > 0)
+    {
+        userData.wishListData[req.body.itemId] -= 1;
+        await Users.findOneAndUpdate({_id: req.user.id}, {wishListData: userData.wishListData});
+    }
+    res.send("Removed");
+});
+
+// Creating Endpoint To Get wishListData
+
+app.post('/getwishlist', fetchUser, async (req, res) => {
+    let userData = await Users.findOne({_id: req.user.id});
+    res.json({wishListData : userData.wishListData});
 });
 
 // Starts the Express server and listens on the specified port

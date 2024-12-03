@@ -1,47 +1,82 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect, useState } from "react";
 import "./ProductDisplay.css";
-import start_icon from "../Assets/star_icon.png"
-import start_dull_icon from "../Assets/star_dull_icon.png"
+import start_icon from "../Assets/star_icon.png";
+import start_dull_icon from "../Assets/star_dull_icon.png";
 import { ShopContext } from "../../Context/ShopContext";
+import heart_icon from "../Assets/heart.png";
+import heart_filled_icon from "../Assets/heart_full.png";
 
 const ProductDisplay = (props) => {
-    const {product} = props;
-    const {addToCart} = useContext(ShopContext);
+    const { product } = props;
+    const { addToCart, addToWishlist, removefromwishlist, wishlistItems } = useContext(ShopContext);
+
+    const [heartIcon, setHeartIcon] = useState(heart_icon);
+
+    useEffect(() => {
+        if (wishlistItems[product.id] > 0) {
+            setHeartIcon(heart_filled_icon); 
+        } else {
+            setHeartIcon(heart_icon);
+        }
+    }, [wishlistItems, product.id]);
+
+  
+    const toggleHeartIcon = (id) => {
+        if (heartIcon === heart_icon) {
+            setHeartIcon(heart_filled_icon); 
+            addToWishlist(id); 
+        } else {
+            setHeartIcon(heart_icon);
+            removefromwishlist(id);
+        }
+    };
+
     
-    return(
+    let categoryDesctiption = "";
+    if (product.category === "women")
+    {
+        categoryDesctiption = "Women, T-shirt, Crop-top";
+    } else if (product.category === "men") 
+    {
+        categoryDesctiption = "Men, T-shirt, Polo shirt";
+    } else
+    {
+        categoryDesctiption = "Kids, T-shirt, Hoodie";
+    }
+
+    return (
         <div className="productdisplay">
             <div className="productdisplay-left">
                 <div className="productdisplay-img-list">
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
-                    <img src={product.image} alt=""/>
+                    <img src={product.image} alt="" />
+                    <img src={product.image} alt="" />
+                    <img src={product.image} alt="" />
+                    <img src={product.image} alt="" />
                 </div>
                 <div className="productdisplay-img">
-                    <img className="productdisplay-main-img" src={product.image} alt=""/>
+                    <div className="heart-icon" onClick={() => toggleHeartIcon(product.id)}>
+                        <img src={heartIcon} alt=""/>
+                    </div>
+                    <img className="productdisplay-main-img" src={product.image} alt="" />
                 </div>
             </div>
             <div className="productdisplay-right">
                 <h1>{product.name}</h1>
                 <div className="productdisplay-right-star">
-                    <img src={start_icon} alt =""/>
-                    <img src={start_icon} alt =""/>
-                    <img src={start_icon} alt =""/>
-                    <img src={start_icon} alt =""/>
-                    <img src={start_dull_icon} alt =""/>
+                    <img src={start_icon} alt="" />
+                    <img src={start_icon} alt="" />
+                    <img src={start_icon} alt="" />
+                    <img src={start_icon} alt="" />
+                    <img src={start_dull_icon} alt="" />
                     <p>(122)</p>
                 </div>
                 <div className="productdisplay-right-prices">
-                    <div className="productdisplay-right-price-old">
-                        ₪{product.old_price}
-                    </div>
-                    <div className="productdisplay-right-price-new">
-                        ₪{product.new_price}
-                    </div>
+                    <div className="productdisplay-right-price-old">₪{product.old_price}</div>
+                    <div className="productdisplay-right-price-new">₪{product.new_price}</div>
                 </div>
                 <div className="productdisplay-right-description">
-                A lightweight, usually knitted, pullover shirt that is close-fitting, with a round neckline and short sleeves,
-                 worn as an undershirt or outer garment
+                    A lightweight, usually knitted, pullover shirt that is close-fitting, with a round neckline and short sleeves,
+                    worn as an undershirt or outer garment
                 </div>
                 <div className="productdisplay-right-size">
                     <h1>Select size</h1>
@@ -52,9 +87,13 @@ const ProductDisplay = (props) => {
                         <div>XL</div>
                         <div>XXL</div>
                     </div>
-                    <button onClick={()=>addToCart(product.id)}>ADD TO CART</button>
-                    <p className="productdisplay-right-category"><span>Category: </span>Women, T-shirt, Crop-top</p>
-                    <p className="productdisplay-right-tags"><span>Tags: </span>Modern, Latest</p>
+                    <button onClick={() => addToCart(product.id)}>ADD TO CART</button>
+                    <p className="productdisplay-right-category">
+                        <span>Category: </span>{categoryDesctiption}
+                    </p>
+                    <p className="productdisplay-right-tags">
+                        <span>Tags: </span>Modern, Latest
+                    </p>
                 </div>
             </div>
         </div>

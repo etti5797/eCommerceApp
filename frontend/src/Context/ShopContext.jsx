@@ -16,6 +16,7 @@ const ShopContextProvider = (props) => {
 
     const [all_products, setAllProducts] = useState([]);
     const [cartItems, setCartItems] = useState(getDefaultCart());
+    const [wishlistItems, setWishlistItems] = useState(getDefaultCart());
 
     useEffect(()=>{
         fetch("http://localhost:4000/allproducts")
@@ -36,6 +37,19 @@ const ShopContextProvider = (props) => {
             })
             .then(res => res.json())
             .then(data => setCartItems(data.cartData));
+
+            fetch("http://localhost:4000/getwishlist",
+                {
+                    method: "POST",
+                    headers: {
+                        Accept : "application/json",
+                        "Content-Type": "application/json",
+                        "auth-token": `${localStorage.getItem("auth-token")}`
+                    },
+                    body: ""
+                })
+                .then(res => res.json())
+                .then(data => setWishlistItems(data.wishListData));
         }
 
     }, [])
@@ -78,6 +92,44 @@ const ShopContextProvider = (props) => {
             }
     }
 
+    const addToWishlist = (itemId) =>
+    {
+        setWishlistItems((prev) => ({...prev, [itemId]: prev[itemId] + 1}));
+        if(localStorage.getItem("auth-token"))
+        {
+            fetch("http://localhost:4000/addtowishlist", {
+                method: "POST",
+                headers: {
+                    Accept : "application/json",
+                    "Content-Type": "application/json",
+                    "auth-token": `${localStorage.getItem("auth-token")}`
+                },
+                body: JSON.stringify({"itemId": itemId})
+            })
+            .then(res => res.json())
+            .then(data => console.log(data));
+        }
+    }
+
+    const removefromwishlist = (itemId) =>
+    {
+        setWishlistItems((prev) => ({...prev, [itemId]: prev[itemId] - 1}));
+        if(localStorage.getItem("auth-token"))
+            {
+                fetch("http://localhost:4000/removefromwishlist", {
+                    method: "POST",
+                    headers: {
+                        Accept : "application/json",
+                        "Content-Type": "application/json",
+                        "auth-token": `${localStorage.getItem("auth-token")}`
+                    },
+                    body: JSON.stringify({"itemId": itemId})
+                })
+                .then(res => res.json())
+                .then(data => console.log(data));
+            }
+    }
+
     const getTotalCartAmount = () =>
     {
         let totalAmount = 0;
@@ -104,7 +156,7 @@ const ShopContextProvider = (props) => {
         return totalItems;
     }
 
-    const contextValue = { getTotalCartItems, getTotalCartAmount, all_products, cartItems, addToCart, removeFromCart };
+    const contextValue = { getTotalCartItems, getTotalCartAmount, all_products, cartItems, addToCart, removeFromCart, addToWishlist, removefromwishlist, wishlistItems };
 
     return (
         <ShopContext.Provider value={contextValue}>
